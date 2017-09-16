@@ -9,8 +9,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "koa": "^2.3.0",
-    "koa-router": "^7.2.1"
+    "koa-bodyparser": "^4.2.0",
+    "koa-router": "^7.2.1",
+    "lodash": "^4.17.4",
+    "mongoose": "^4.11.11",
+    "mongoose-beautiful-unique-validation": "^7.0.0",
+    "validator": "^8.2.0"
   },
   "devDependencies": {
     "eslint": "^4.7.0",
