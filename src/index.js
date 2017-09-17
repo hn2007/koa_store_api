@@ -18,8 +18,12 @@ app.use(async (ctx, next) => {
 		await next();
 	} catch (e) {
 		if (e.name === 'ValidationError') {
-			ctx.status = 422;
-			ctx.body = { body: Object.keys(e.errors).map(key => pick(e.errors[key], ['message', 'name'])) };
+			if (e.errors) {
+				ctx.res.unprocessableEntity(Object.entries(e.errors).map((key, value) => pick(value, ['message', 'name'])));
+			}
+			if (e.details) {
+				ctx.res.unprocessableEntity(e.details.map(error => pick(error, ['message', 'name'])));
+			}
 		} else {
 			console.log(e);
 		}
