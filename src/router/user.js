@@ -1,7 +1,9 @@
 const Router = require('koa-router');
 const User = require('../models/User');
 
-const userRouter = Router();
+const userRouter = Router({
+	prefix: '/users',
+});
 
 userRouter
 	.get('/', async (ctx) => {
@@ -21,13 +23,11 @@ userRouter
 		}
 	})
 	.delete('/:id', async (ctx) => {
-		const user = await User.findById(ctx.params.id);
+		const user = await User.findByIdAndRemove(ctx.params.id);
 		if (user) {
-			ctx.status = 200;
-			ctx.body = { message: `${user.name} has been removed` };
+			ctx.res.ok({ message: `${user.name} has been removed` });
 		} else {
-			ctx.status = 404;
-			ctx.body = { message: 'User not found' };
+			ctx.res.notFound({ message: 'User not found' });
 		}
 	});
 
