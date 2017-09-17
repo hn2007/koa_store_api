@@ -1,6 +1,7 @@
 const beautifyUnique = require('mongoose-beautiful-unique-validation');
-const mongoose = require('mongoose');
 const validator = require('validator');
+const mongoose = require('mongoose');
+const pick = require('lodash/pick');
 const bcrypt = require('bcryptjs');
 
 const UserSchema = mongoose.Schema({
@@ -37,6 +38,13 @@ UserSchema.pre('save', function (next) {
 		return next();
 	});
 });
+
+UserSchema.publicFields = ['_id', 'name', 'email'];
+UserSchema.methods.toJSON = function() {
+	const obj = this.toObject();
+	return pick(obj, UserSchema.publicFields);
+};
+
 
 UserSchema.methods.comparePassword = function (candidatePassword) {
 	return bcrypt.compare(candidatePassword, this.password);

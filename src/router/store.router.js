@@ -4,6 +4,7 @@ const passport = require('koa-passport');
 const Router = require('koa-router');
 
 const Store = require('../models/Store');
+const User = require('../models/User');
 
 const storeRouter = Router({
 	prefix: '/stores',
@@ -48,13 +49,25 @@ storeRouter
 		}
 	})
 	.delete('/:id', passport.authenticate('jwt', { session: false }), async (ctx) => {
-		const store = await Store.findOne({ _id: ctx.params.id });
+		const store = await Store.findById(ctx.params.id);
 		if (!store) {
 			return ctx.res.notFound(undefined, 'Store not found');
 		}
 		if (store.isAdmin(ctx.state.user.id)) {
 			await store.remove();
 			ctx.res.ok(undefined, `${store.name} has been removed`);
+		} else {
+			ctx.res.notFound(undefined, 'You haven\'t permission to contribute this store');
+		}
+	})
+	.get('/:id/admins', passport.authenticate('jwt', { session: false }), async (ctx) => {
+		const store = await Store.findById(ctx.params.id);
+		if (!store) {
+			return ctx.res.notFound(undefined, 'Store not found');
+		}
+		if (store.isAdmin(ctx.state.user.id)) {
+			const admins = await User.find({ _id: { $in: store.admins } });
+			ctx.res.ok(admins, `admin list of store (${store.name})`);
 		} else {
 			ctx.res.notFound(undefined, 'You haven\'t permission to contribute this store');
 		}
