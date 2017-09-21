@@ -30,11 +30,11 @@ storeRouter
 			if (ctx.query.self) {
 				options.admins = ctx.state.user.id;
 			}
-			const [stores, allStores] = await Promise.all([
+			const [stores, allStoresCount] = await Promise.all([
 				Store.find({ admins: ctx.state.user.id }).skip(ctx.query.offset).limit(ctx.query.limit),
 				Store.find({ admins: ctx.state.user.id }).count(),
 			]);
-			ctx.res.ok({ stores, allStores, filteredStores: stores.length }, 'Stores list provided');
+			ctx.res.ok({ stores, allStoresCount, filteredStoresCount: stores.length }, 'Stores list provided');
 		})
 	.post('/', passport.authenticate('jwt', { session: false }), async (ctx) => {
 		const storeData = Object.assign({}, ctx.request.body, { admins: [ctx.state.user._id] });
