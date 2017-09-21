@@ -19,9 +19,8 @@ app.use(async (ctx, next) => {
 	} catch (e) {
 		if (e.name === 'ValidationError') {
 			if (e.errors) {
-				ctx.res.unprocessableEntity(Object.entries(e.errors).map((key, value) => pick(value, ['message', 'name'])));
-			}
-			if (e.details) {
+				ctx.res.unprocessableEntity(Object.values(e.errors).map(value => pick(value, ['message', 'name'])));
+			} else if (e.details) {
 				ctx.res.unprocessableEntity(e.details.map(error => pick(error, ['message', 'name'])));
 			}
 		} else {
