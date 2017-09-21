@@ -18,7 +18,7 @@ userRouter
 				return ctx.res.ok({ user, token, message: 'Successfully logged In' });
 			}
 		}
-		return ctx.res.badRequest({ message: 'Email or password is incorrect' });
+		return ctx.res.badRequest([{ message: 'Email or password is incorrect' }]);
 	})
 	.get('/me', passport.authenticate('jwt', { session: false }), async (ctx) => {
 		ctx.res.ok({ data: ctx.state.user });
