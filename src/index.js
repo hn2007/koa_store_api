@@ -1,6 +1,7 @@
 const bodyParser = require('koa-bodyparser');
 const pick = require('lodash/pick');
 const Koa = require('koa');
+const cors = require('koa-cors');
 
 require('./common/connect');
 
@@ -10,6 +11,7 @@ const passport = require('./common/passport');
 
 const app = new Koa();
 
+app.use(cors());
 app.use(responseHandler({ contentType: 'application/json' }));
 app.use(passport.initialize());
 
