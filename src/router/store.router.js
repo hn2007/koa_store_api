@@ -45,7 +45,7 @@ storeRouter
 		if (store) {
 			ctx.res.ok(store, 'Store info provided');
 		} else {
-			ctx.res.notFound(undefined, 'User not found');
+			ctx.res.notFound(undefined, 'Store not found');
 		}
 	})
 	.delete('/:id', passport.authenticate('jwt', { session: false }), async (ctx) => {

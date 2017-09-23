@@ -15,10 +15,10 @@ userRouter
 			const isPasswordCorrect = await user.comparePassword(ctx.request.body.password);
 			if (isPasswordCorrect) {
 				const token = jwt.sign({ id: user._id }, 'secret');
-				return ctx.res.ok({ user, token, message: 'Successfully logged In' });
+				return ctx.res.ok({ user, token }, 'Successfully logged In');
 			}
 		}
-		return ctx.res.badRequest([{ message: 'Email or password is incorrect' }]);
+		return ctx.res.badRequest(undefined, 'Email or password is incorrect');
 	})
 	.get('/me', passport.authenticate('jwt', { session: false }), async (ctx) => {
 		ctx.res.ok({ data: ctx.state.user });
